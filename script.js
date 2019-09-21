@@ -33,6 +33,19 @@ function clearErrorMsgs(field) {
 	}
 }
 
+// function validCarYear(field) {
+// 	const fieldContainer = field.parentNode;
+// 	clearErrorMsgs(field);
+// 	if ((field = '')) {
+// 		return;
+// 	} else if (isNaN(field)) {
+// 		markInvalid(fieldContainer, 'Oops! The year must be a number.');
+// 		// } else {
+// 		// 	markValid(field);
+// 		// }
+// 	}
+// }
+
 query('#parking-form').addEventListener('submit', function(event) {
 	event.preventDefault();
 	let nameTextField = query('#name');
@@ -47,15 +60,18 @@ query('#parking-form').addEventListener('submit', function(event) {
 query('#parking-form').addEventListener('submit', function(event) {
 	event.preventDefault();
 	let carFields = query('.input-group').children;
-	let i;
+	let carBox = [];
 
 	for (i = 0; i < carFields.length; i++) {
-		if (!carFields[i].value) {
-			markInvalid(carFields[i].parentNode, 'Oops! All car fields are required.');
-			return;
+		carBox.push(carFields[i].value);
+		console.log(carBox);
+		if (!carBox[i]) {
+			markInvalid(carFields[i].parentNode, 'Oops! All Fields are required');
+		} else if (carBox[0] < 1900 || (carBox[0] > 2020 || isNaN(carBox[0]))) {
+			markInvalid(carFields[i].parentNode, 'Oops! please enter a valid year.');
 		} else {
-			markValid(carFields[i].parentNode);
-			// clearErrorMsgs(carFields[i].parentNode);
+			markValid(carFields[0].parentNode);
+			console.log(carBox[i]);
 		}
 	}
 });
