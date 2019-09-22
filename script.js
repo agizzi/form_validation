@@ -34,10 +34,8 @@ function clearErrorMsgs(field) {
 }
 
 function isDateTodayorLater(date) {
-	let now = new Date(Date.now());
+	let now = new Date();
 	let userDate = new Date(date);
-	// if (userDate > now) {
-	// }
 	console.log(now);
 	return userDate <= now;
 }
@@ -64,17 +62,16 @@ function luhnCheck(val) {
 	return sum % 10 == 0;
 }
 
-function sumOfDays(field) {
-	let now = new Date(Date.now());
+function sumOfDays(startDay, field) {
+	// clearErrorMsgs(totalField);
+	let now = new Date(startDay);
 	let amount = Number(field.value);
 	let sum = 0;
 	let totalField = query('#total');
 	let totalParagraph = document.createElement('p');
-	// let totalParagraph = totalField.appendChild(successMsg);
-	let successMsg = totalParagraph.innerHTML;
-	totalParagraph.classList.add('input-hint', 'text-success', 'success-message');
-	// totalParagraph.innerHTML = 'Your total is ${sum} dollars.`;
-	// totalField.appendChild(totalParagraph);
+	clearErrorMsgs(totalField);
+	totalParagraph.classList.add('text-success', 'error-message');
+
 	for (let i = 1; i <= amount; i++) {
 		if (now.getDay() === 6 || now.getDay() === 0) {
 			sum += 7;
@@ -82,14 +79,13 @@ function sumOfDays(field) {
 			sum += 5;
 		}
 		now.setDate(now.getDate() + 1);
-		successMsg = `Your total is ${sum} dollars.`;
-		// totalField.appendChild(successMsg);
-		totalParagraph = totalField.appendChild(successMsg);
+		totalParagraph.innerText = `Success! Your form has been submitted. Your total is ${sum} dollars.`;
+		totalField.appendChild(totalParagraph);
 	}
 	return sum;
-	// successMsg = (`Your total is ${sum} dollars.`);
-	// totalField.appendChild(successMsg);
 }
+
+let validityPoints;
 
 query('#parking-form').addEventListener('submit', function(event) {
 	event.preventDefault();
@@ -99,6 +95,8 @@ query('#parking-form').addEventListener('submit', function(event) {
 		markInvalid(nameTextField, 'Oops! You forgot to add your name.');
 	} else {
 		markValid(nameTextField);
+		validityPoints = 1;
+		console.log(validityPoints);
 	}
 });
 
@@ -109,14 +107,16 @@ query('#parking-form').addEventListener('submit', function(event) {
 
 	for (i = 0; i < carFields.length; i++) {
 		carBox.push(carFields[i].value);
-		console.log(carBox);
+		// console.log(carBox);
 		if (!carBox[i]) {
 			markInvalid(carFields[i].parentNode, 'Oops! All Fields are required');
 		} else if (carBox[0] < 1900 || (carBox[0] > 2020 || isNaN(carBox[0]))) {
 			markInvalid(carFields[i].parentNode, 'Oops! please enter a valid year.');
 		} else {
 			markValid(carFields[0].parentNode);
-			console.log(carBox[i]);
+			// console.log(carBox[i]);
+			validityPoints += 1;
+			console.log(validityPoints);
 		}
 	}
 });
@@ -132,6 +132,8 @@ query('#parking-form').addEventListener('submit', function(event) {
 		markInvalid(dateTextField, 'Oops! Your date needs to be in the future.');
 	} else {
 		markValid(dateTextField);
+		validityPoints += 1;
+		console.log(validityPoints);
 	}
 	console.log(dateText);
 });
@@ -147,6 +149,8 @@ query('#parking-form').addEventListener('submit', function(event) {
 		markInvalid(daysTextField, 'Oops! The number of days must be a number between 1 and 30.');
 	} else {
 		markValid(daysTextField);
+		validityPoints += 1;
+		console.log(validityPoints);
 	}
 });
 
@@ -159,6 +163,8 @@ query('#parking-form').addEventListener('submit', function(event) {
 		markInvalid(creditCardField, 'Oops! We need a valid credit card number to process your payment.');
 	} else {
 		markValid(creditCardField);
+		validityPoints += 1;
+		console.log(validityPoints);
 	}
 });
 
@@ -171,6 +177,8 @@ query('#parking-form').addEventListener('submit', function(event) {
 		markInvalid(cvvField, 'Oops! We need your three digit code on the back of your credit card.');
 	} else {
 		markValid(cvvField);
+		validityPoints += 1;
+		console.log(validityPoints);
 	}
 });
 
@@ -183,6 +191,8 @@ query('#parking-form').addEventListener('submit', function(event) {
 		markInvalid(expirationField, 'Oops! We need the expiration date of your credit card');
 	} else {
 		markValid(expirationField);
+		validityPoints += 1;
+		console.log(validityPoints);
 	}
 });
 
@@ -190,13 +200,14 @@ query('#parking-form').addEventListener('submit', function(event) {
 	event.preventDefault();
 	// const fieldContainer = field.parentNode;
 	let daysTextField = query('#days');
-	// let totalField = query('#total');
-
-	// totalParagraph = document.createElement('p');
-	// totalParagraph.innerHTML = `Your total is ${sum} dollars.`;
-	// totalField.appendChild(totalParagraph);
-	// let totalText = totalField.value;
-	let total = sumOfDays(daysTextField);
+	let totalField = query('#total');
+	let dateTextField = query('#start-date');
+	let dateText = dateTextField.value;
+	if (validityPoints === 9) {
+		total = sumOfDays(dateText, daysTextField);
+	} else {
+		clearErrorMsgs(totalField);
+	}
 	// console.log(totalParagraph.innerHTML);
 	console.log(total);
 });
