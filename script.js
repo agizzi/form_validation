@@ -68,6 +68,13 @@ function sumOfDays(field) {
 	let now = new Date(Date.now());
 	let amount = Number(field.value);
 	let sum = 0;
+	let totalField = query('#total');
+	let totalParagraph = document.createElement('p');
+	// let totalParagraph = totalField.appendChild(successMsg);
+	let successMsg = totalParagraph.innerHTML;
+	totalParagraph.classList.add('input-hint', 'text-success', 'success-message');
+	// totalParagraph.innerHTML = 'Your total is ${sum} dollars.`;
+	// totalField.appendChild(totalParagraph);
 	for (let i = 1; i <= amount; i++) {
 		if (now.getDay() === 6 || now.getDay() === 0) {
 			sum += 7;
@@ -75,8 +82,13 @@ function sumOfDays(field) {
 			sum += 5;
 		}
 		now.setDate(now.getDate() + 1);
+		successMsg = `Your total is ${sum} dollars.`;
+		// totalField.appendChild(successMsg);
+		totalParagraph = totalField.appendChild(successMsg);
 	}
 	return sum;
+	// successMsg = (`Your total is ${sum} dollars.`);
+	// totalField.appendChild(successMsg);
 }
 
 query('#parking-form').addEventListener('submit', function(event) {
@@ -176,10 +188,15 @@ query('#parking-form').addEventListener('submit', function(event) {
 
 query('#parking-form').addEventListener('submit', function(event) {
 	event.preventDefault();
+	// const fieldContainer = field.parentNode;
 	let daysTextField = query('#days');
-	// let daysText = daysTextField.value.trim();
-	let totalField = query('#total');
+	// let totalField = query('#total');
+
+	// totalParagraph = document.createElement('p');
+	// totalParagraph.innerHTML = `Your total is ${sum} dollars.`;
+	// totalField.appendChild(totalParagraph);
 	// let totalText = totalField.value;
 	let total = sumOfDays(daysTextField);
+	// console.log(totalParagraph.innerHTML);
 	console.log(total);
 });
