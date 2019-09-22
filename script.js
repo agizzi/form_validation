@@ -87,7 +87,7 @@ function sumOfDays(startDay, field) {
 	return sum;
 }
 
-let validityPoints;
+let validityPoints = 0;
 
 query('#parking-form').addEventListener('submit', function(event) {
 	event.preventDefault();
@@ -97,7 +97,7 @@ query('#parking-form').addEventListener('submit', function(event) {
 		markInvalid(nameTextField, 'Oops! You forgot to add your name.');
 	} else {
 		markValid(nameTextField);
-		validityPoints = 1;
+		validityPoints += 1;
 		console.log(validityPoints);
 	}
 });
@@ -211,5 +211,5 @@ query('#parking-form').addEventListener('submit', function(event) {
 		clearErrorMsgs(totalField);
 	}
 	// console.log(totalParagraph.innerHTML);
-	console.log(total);
+	// console.log(total);
 });
