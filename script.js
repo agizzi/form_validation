@@ -1,3 +1,5 @@
+console.log("You're connected!");
+
 function query(selector) {
 	return document.querySelector(selector);
 }
@@ -65,14 +67,14 @@ function luhnCheck(val) {
 function sumOfDays(startDay, field) {
 	// clearErrorMsgs(totalField);
 	let now = new Date(startDay);
-	let amount = Number(field.value);
+	let amountOfDays = Number(field.value);
 	let sum = 0;
 	let totalField = query('#total');
 	let totalParagraph = document.createElement('p');
 	clearErrorMsgs(totalField);
 	totalParagraph.classList.add('text-success', 'error-message');
 
-	for (let i = 1; i <= amount; i++) {
+	for (let i = 1; i <= amountOfDays; i++) {
 		if (now.getDay() === 6 || now.getDay() === 0) {
 			sum += 7;
 		} else {
