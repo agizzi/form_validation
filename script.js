@@ -20,6 +20,11 @@ function markInvalid(field, errorMsg) {
 	fieldContainer.classList.remove('input-valid');
 	fieldContainer.classList.add('input-invalid');
 
+	if (query('.text-success') !== null) {
+		let successMsg = query('.text-success');
+		successMsg.remove();
+	}
+
 	if (errorMsg) {
 		const errorParagraph = document.createElement('p');
 		errorParagraph.classList.add('input-hint', 'text-danger', 'error-message');
@@ -83,11 +88,31 @@ function sumOfDays(startDay, field) {
 			sum += 5;
 		}
 		now.setDate(now.getDate() + 1);
-		totalParagraph.innerText = `Success! Your form has been submitted. Your total is ${sum} dollars.`;
+		totalParagraph.innerText = `Success! Your form has been submitted. Your total is $${sum}.00.`;
 		totalField.appendChild(totalParagraph);
 	}
 	return sum;
 }
+
+// function validExpiration(dateString) {
+// expirationDate = dateString.split('/').map(Number);
+// now = new Date();
+// year = now.getYear() - 100;
+// month = now.getMonth() + 1;
+// compareArray = [ month, year ];
+// if (
+// 	expirationDate[0] >= compareArray[0] &&
+// 	expirationDate[0] >= 1 &&
+// 	expiration[0] <= 12 &&
+// 	expirationDate[1] >= compareArray[1]
+// ) {
+// 	markValid(dateString.parentNode);
+// 	return true;
+// } else {
+// 	markInvalid(dateString.parentNode, 'We need the expiration date of your credit card');
+// 	return false;
+// }
+// }
 
 let validityPoints = 0;
 
@@ -190,14 +215,25 @@ query('#parking-form').addEventListener('submit', function(event) {
 	event.preventDefault();
 	let expirationField = query('#expiration');
 	let expirationText = expirationField.value.trim();
-	// console.log(expirationText);
-	if (!expirationText) {
-		markInvalid(expirationField, 'Oops! We need the expiration date of your credit card');
-	} else {
+	console.log(expirationText);
+	expirationDate = expirationText.split('/').map(Number);
+	now = new Date();
+	year = now.getYear() - 100;
+	month = now.getMonth() + 1;
+	compareArray = [ month, year ];
+	if (
+		expirationDate[0] >= 1 &&
+		expirationDate[0] <= 12 &&
+		expirationDate[1] >= compareArray[1] &&
+		expirationDate[0] >= compareArray[0]
+	) {
 		markValid(expirationField);
 		validityPoints += 1;
-		console.log(validityPoints);
+	} else {
+		markInvalid(expirationField, 'We need the expiration date of your credit card');
+		return false;
 	}
+	// }
 });
 
 query('#parking-form').addEventListener('submit', function(event) {
@@ -211,7 +247,7 @@ query('#parking-form').addEventListener('submit', function(event) {
 	if (validityPoints === 9) {
 		total = sumOfDays(dateText, daysTextField);
 	} else {
-		totalParagraph.innerText = '';
+		// totalParagraph.innerText = '';
 		console.log(validityPoints);
 	}
 });
