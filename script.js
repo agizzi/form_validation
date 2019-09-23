@@ -20,9 +20,8 @@ function markInvalid(field, errorMsg) {
 	fieldContainer.classList.remove('input-valid');
 	fieldContainer.classList.add('input-invalid');
 
-	if (query('.text-success') !== null) {
-		let successMsg = query('.text-success');
-		successMsg.remove();
+	if (query('.text-success')) {
+		query('.text-success').remove();
 	}
 
 	if (errorMsg) {
@@ -38,8 +37,6 @@ function clearErrorMsgs(field) {
 	for (let msg of fieldContainer.querySelectorAll('.error-message')) {
 		msg.remove();
 	}
-	// console.log(fieldContainer.querySelectorAll('.error-message'));
-	// console.log({ field });
 }
 
 function isDateTodayorLater(date) {
@@ -72,7 +69,6 @@ function luhnCheck(val) {
 }
 
 function sumOfDays(startDay, field) {
-	// clearErrorMsgs(totalField);
 	let now = new Date(startDay);
 	let amountOfDays = Number(field.value);
 	let sum = 0;
@@ -94,26 +90,6 @@ function sumOfDays(startDay, field) {
 	return sum;
 }
 
-// function validExpiration(dateString) {
-// expirationDate = dateString.split('/').map(Number);
-// now = new Date();
-// year = now.getYear() - 100;
-// month = now.getMonth() + 1;
-// compareArray = [ month, year ];
-// if (
-// 	expirationDate[0] >= compareArray[0] &&
-// 	expirationDate[0] >= 1 &&
-// 	expiration[0] <= 12 &&
-// 	expirationDate[1] >= compareArray[1]
-// ) {
-// 	markValid(dateString.parentNode);
-// 	return true;
-// } else {
-// 	markInvalid(dateString.parentNode, 'We need the expiration date of your credit card');
-// 	return false;
-// }
-// }
-
 let validityPoints = 0;
 
 query('#parking-form').addEventListener('submit', function(event) {
@@ -125,7 +101,6 @@ query('#parking-form').addEventListener('submit', function(event) {
 	} else {
 		markValid(nameTextField);
 		validityPoints += 1;
-		// console.log(validityPoints);
 	}
 });
 
@@ -136,16 +111,13 @@ query('#parking-form').addEventListener('submit', function(event) {
 
 	for (i = 0; i < carFields.length; i++) {
 		carBox.push(carFields[i].value);
-		// console.log(carBox);
 		if (!carBox[i]) {
 			markInvalid(carFields[i].parentNode, 'Oops! All Fields are required');
 		} else if (carBox[0] < 1900 || (carBox[0] > 2020 || isNaN(carBox[0]))) {
 			markInvalid(carFields[i].parentNode, 'Oops! please enter a valid year.');
 		} else {
 			markValid(carFields[0].parentNode);
-			// console.log(carBox[i]);
 			validityPoints += 1;
-			// console.log(validityPoints);
 		}
 	}
 });
@@ -154,7 +126,6 @@ query('#parking-form').addEventListener('submit', function(event) {
 	event.preventDefault();
 	let dateTextField = query('#start-date');
 	let dateText = dateTextField.value;
-	// console.log(dateText);
 	if (!dateText) {
 		markInvalid(dateTextField, 'Oops! You need to add a date.');
 	} else if (isDateTodayorLater(dateText)) {
@@ -162,7 +133,6 @@ query('#parking-form').addEventListener('submit', function(event) {
 	} else {
 		markValid(dateTextField);
 		validityPoints += 1;
-		// console.log(validityPoints);
 	}
 	console.log(dateText);
 });
@@ -171,7 +141,6 @@ query('#parking-form').addEventListener('submit', function(event) {
 	event.preventDefault();
 	let daysTextField = query('#days');
 	let daysText = daysTextField.value.trim();
-	// console.log(daysText);
 	if (!daysText) {
 		markInvalid(daysTextField, 'Oops! We need to know how many days you need a pass.');
 	} else if (isNaN(daysText) || daysText < 1 || daysText > 30) {
@@ -179,7 +148,6 @@ query('#parking-form').addEventListener('submit', function(event) {
 	} else {
 		markValid(daysTextField);
 		validityPoints += 1;
-		// console.log(validityPoints);
 	}
 });
 
@@ -187,13 +155,11 @@ query('#parking-form').addEventListener('submit', function(event) {
 	event.preventDefault();
 	let creditCardField = query('#credit-card');
 	let creditCardText = creditCardField.value.trim();
-	// console.log(creditCardText);
 	if (!creditCardText || validateCardNumber(creditCardText) === false) {
 		markInvalid(creditCardField, 'Oops! We need a valid credit card number to process your payment.');
 	} else {
 		markValid(creditCardField);
 		validityPoints += 1;
-		// console.log(validityPoints);
 	}
 });
 
@@ -201,13 +167,11 @@ query('#parking-form').addEventListener('submit', function(event) {
 	event.preventDefault();
 	let cvvField = query('#cvv');
 	let cvvText = cvvField.value.trim();
-	// console.log(cvvText);
 	if (!cvvText || isNaN(cvvText) || cvvText.length !== 3) {
 		markInvalid(cvvField, 'Oops! We need your three digit code on the back of your credit card.');
 	} else {
 		markValid(cvvField);
 		validityPoints += 1;
-		// console.log(validityPoints);
 	}
 });
 
@@ -221,24 +185,21 @@ query('#parking-form').addEventListener('submit', function(event) {
 	year = now.getYear() - 100;
 	month = now.getMonth() + 1;
 	compareArray = [ month, year ];
-	if (
-		expirationDate[0] >= 1 &&
-		expirationDate[0] <= 12 &&
-		expirationDate[1] >= compareArray[1] &&
-		expirationDate[0] >= compareArray[0]
-	) {
+	if (expirationDate[0] >= 1 && expirationDate[0] <= 12 && expirationDate[1] > compareArray[1]) {
+		expirationDate[0] >= compareArray[0];
+		markValid(expirationField);
+		validityPoints += 1;
+	} else if (expirationDate[0] >= compareArray[0] && expirationDate[1] === compareArray[1]) {
 		markValid(expirationField);
 		validityPoints += 1;
 	} else {
 		markInvalid(expirationField, 'We need the expiration date of your credit card');
 		return false;
 	}
-	// }
 });
 
 query('#parking-form').addEventListener('submit', function(event) {
 	event.preventDefault();
-	// const fieldContainer = field.parentNode;
 	let daysTextField = query('#days');
 	let totalField = query('#total');
 	let dateTextField = query('#start-date');
@@ -247,7 +208,6 @@ query('#parking-form').addEventListener('submit', function(event) {
 	if (validityPoints === 9) {
 		total = sumOfDays(dateText, daysTextField);
 	} else {
-		// totalParagraph.innerText = '';
 		console.log(validityPoints);
 	}
 });
