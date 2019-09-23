@@ -33,6 +33,8 @@ function clearErrorMsgs(field) {
 	for (let msg of fieldContainer.querySelectorAll('.error-message')) {
 		msg.remove();
 	}
+	// console.log(fieldContainer.querySelectorAll('.error-message'));
+	// console.log({ field });
 }
 
 function isDateTodayorLater(date) {
@@ -98,7 +100,7 @@ query('#parking-form').addEventListener('submit', function(event) {
 	} else {
 		markValid(nameTextField);
 		validityPoints += 1;
-		console.log(validityPoints);
+		// console.log(validityPoints);
 	}
 });
 
@@ -118,7 +120,7 @@ query('#parking-form').addEventListener('submit', function(event) {
 			markValid(carFields[0].parentNode);
 			// console.log(carBox[i]);
 			validityPoints += 1;
-			console.log(validityPoints);
+			// console.log(validityPoints);
 		}
 	}
 });
@@ -135,7 +137,7 @@ query('#parking-form').addEventListener('submit', function(event) {
 	} else {
 		markValid(dateTextField);
 		validityPoints += 1;
-		console.log(validityPoints);
+		// console.log(validityPoints);
 	}
 	console.log(dateText);
 });
@@ -152,7 +154,7 @@ query('#parking-form').addEventListener('submit', function(event) {
 	} else {
 		markValid(daysTextField);
 		validityPoints += 1;
-		console.log(validityPoints);
+		// console.log(validityPoints);
 	}
 });
 
@@ -166,7 +168,7 @@ query('#parking-form').addEventListener('submit', function(event) {
 	} else {
 		markValid(creditCardField);
 		validityPoints += 1;
-		console.log(validityPoints);
+		// console.log(validityPoints);
 	}
 });
 
@@ -180,7 +182,7 @@ query('#parking-form').addEventListener('submit', function(event) {
 	} else {
 		markValid(cvvField);
 		validityPoints += 1;
-		console.log(validityPoints);
+		// console.log(validityPoints);
 	}
 });
 
@@ -205,11 +207,16 @@ query('#parking-form').addEventListener('submit', function(event) {
 	let totalField = query('#total');
 	let dateTextField = query('#start-date');
 	let dateText = dateTextField.value;
+
 	if (validityPoints === 9) {
 		total = sumOfDays(dateText, daysTextField);
 	} else {
-		clearErrorMsgs(totalField);
+		totalParagraph.innerText = '';
+		console.log(validityPoints);
 	}
-	// console.log(totalParagraph.innerHTML);
-	// console.log(total);
+});
+
+query('#parking-form').addEventListener('submit', function(event) {
+	event.preventDefault();
+	validityPoints = 0;
 });
