@@ -1,4 +1,4 @@
-console.log("You're connected!");
+
 
 function query(selector) {
 	return document.querySelector(selector);
@@ -42,7 +42,6 @@ function clearErrorMsgs(field) {
 function isDateTodayorLater(date) {
 	let now = new Date();
 	let userDate = new Date(date);
-	console.log(now);
 	return userDate <= now;
 }
 
@@ -134,7 +133,6 @@ query('#parking-form').addEventListener('submit', function(event) {
 		markValid(dateTextField);
 		validityPoints += 1;
 	}
-	console.log(dateText);
 });
 
 query('#parking-form').addEventListener('submit', function(event) {
@@ -179,7 +177,6 @@ query('#parking-form').addEventListener('submit', function(event) {
 	event.preventDefault();
 	let expirationField = query('#expiration');
 	let expirationText = expirationField.value.trim();
-	console.log(expirationText);
 	expirationDate = expirationText.split('/').map(Number);
 	now = new Date();
 	year = now.getYear() - 100;
@@ -208,7 +205,6 @@ query('#parking-form').addEventListener('submit', function(event) {
 	if (validityPoints === 9) {
 		total = sumOfDays(dateText, daysTextField);
 	} else {
-		console.log(validityPoints);
 	}
 });
 
